@@ -2,18 +2,9 @@ use <airknife_hull.scad>
 use <airknife_supports.scad>
 include <parametrization.scad>
 
-    
-module section(size){
-    for (i=[0:$children-1]){
-        intersection(){
-            translate([0.5*size,0,0])
-            cube(size,center=true);
-            children(i);
-        }
-    }
-}
 
-module construct_toroid(
+
+module construct_head(
     t_aks,
     base_ags     = undef,
     side_sup_ags = undef,
@@ -95,10 +86,3 @@ module construct_toroid(
         gen_sup_wrapper(t_aks,gen_sup_ags);
     }
 }
-    
-
-
-
-
-construct_toroid(t_aks(),side_sup_ags=false,gen_sup_ags=false,skirt_ags=false);
-
