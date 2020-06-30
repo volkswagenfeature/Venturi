@@ -1,6 +1,6 @@
-use <../src/Venturi/body_tube.scad>
-use <../src/Venturi/head_assembly.scad>
-use <../src/Venturi/parametrization.scad>
+use <libs/Venturi/body_tube.scad>
+use <libs/Venturi/head_assembly.scad>
+use <libs/Venturi/parametrization.scad>
 
 
 
@@ -9,35 +9,37 @@ function head_sup(
 
 )=[
 
-]
+];
 
 function skirt(
 
 )=[
 
-]
+];
 
 function side_sup(
 
 )=[
 
-]
+];
 
 function base(
 
 )=[
 
-]
+];
 
 function head(
 
 )=[
 
-]
+];
 
 function vp_lt_params(
 
-)=
+)=[
+
+];
 
 
 module venturi_basic(
@@ -45,4 +47,5 @@ module venturi_basic(
     body_ags    = undef,
 ){
     
+}
     
