@@ -12,6 +12,9 @@ module construct_head(
     gen_sup_ags  = undef
 ){
     /*-----START OF SHIM FUNCTIONS-----*/
+    // Note: Shim functions might be broken.
+    // "false" branch doesn't seem to work.
+    // Parameter passing might not either.
     
     // From airknife_hull.scad
     module base_wrapper (t_aks,args){

@@ -1,4 +1,6 @@
-  include <parametrization.scad>
+include <parametrization.scad>
+
+
 
 module poly_support(
     body_len = 4,
@@ -15,7 +17,6 @@ module poly_support(
     s_thk = thickness/2;
     s_dx  = head_width/2;   //tan(nozzle_angle/2)*head_start; //1.1547
     
-    echo("sdx",s_dx);
     // Variable to ensure that polygons intersect,
     // rather than simpily touching. To help avoid issues
     // with intersecting polygons.
@@ -92,7 +93,6 @@ module gen_support(t_aks,spacing=15,c="cyan")
     rotate([90-t_aks[ta_taks],0,180])
     //fix call to poly_support with new args.
     poly_support();
-    echo("latest2");
 }
 
 
