@@ -1,6 +1,83 @@
-include <parametrization.scad>
+// Throat parameters
+nozzle_wid  = 1; //
+start_dist  = 2;
+cone_angle  = 30;
+start_angle = 15;
+outer_rad   = 51;
+inner_rad   = 50;
+end_dist    = 4;
+sup_wid     = 2;
+rep_dist    = 10;
 
+function t_ts() = [
+   nozzle_wid,
+   start_dist,
+   cone_angle,
+   start_angle,//
+   outer_rad,
+   inner_rad,
+   end_dist,
+   sup_wid,
+   rep_dist,
+];
 
+module draw_throat(t_ts){
+    let(
+        wd_tts = 0,
+        sd_tts = 1,
+        ca_tts = 2,
+        sa_tts = 3,
+        or_tts = 4,
+        ir_tts = 5,
+        ed_tts = 6,
+        sw_tts = 7,
+        rd_tts = 8
+    ){
+        let(){
+            angle = 90-t_ts[ca_tts]/2;
+            slope = tan(angle);
+            d_pt  = t_ts[wd_tts]*[cos(angle+90),sin(angle+90)];
+            delta = t_ts[or_tts]-t_ts[ir_tts];
+            
+            e_pt  = t_ts[ed_tts]*[cos(angle+180),sin(angle+180)];
+            
+            s_pt  = t_ts[sd_tts]*[cos(angle),sin(angle)];
+            w_pt  = t_ts[ed_tts]*tan(t_ts[sa_tts])*
+                    [cos(angle-90),sin(angle-90)];
+            
+            echo(w_pt);
+           
+            let(p_1=[t_ts[ir_tts],0],
+                p_2=[t_ts[or_tts],slope*delta],
+                p_3=p_2-d_pt,
+                p_4=p_1-d_pt,
+            
+                p_5=p_1+e_pt,
+                p_6=p_5-d_pt,
+            
+                p_7=p_2+s_pt-w_pt,
+                p_8=p_2+s_pt-d_pt+w_pt
+            
+               ){
+                color("green",.5)
+                //rotate_extrude()
+                polygon([p_1,p_2,p_3,p_4]);
+                   
+                color("red",.5)            
+                //rotate_extrude()
+                polygon([p_1,p_4,p_6,p_5]);
+                
+                color("blue",0.5)
+                //rotate_extrude()
+                polygon([p_2,p_3,p_8,p_7]);   
+               }
+            }
+    }
+}
+
+module test_throat(t_ts){
+    // For testing the propper sizing of a single poly_support at origin.
+}
 
 module poly_support(
     body_len = 4,
@@ -19,7 +96,7 @@ module poly_support(
     
     // Variable to ensure that polygons intersect,
     // rather than simpily touching. To help avoid issues
-    // with intersecting polygons.
+    // with exactly contacting polygons.
     xsz = 0.3;
     
     
@@ -94,5 +171,61 @@ module gen_support(t_aks,spacing=15,c="cyan")
     //fix call to poly_support with new args.
     poly_support();
 }
+/*
+module poly_support(
+    body_len = 4,
+    thickness = 1,
+    width = 2,
+    tail_merge = 3,
+    tail_end = 5,
+    head_width = 2.35,
+    head_start = 2
+){
+*/
 
+/*
+function t_ts() = [
+   nozzle_wid,
+   start_dist,
+   cone_angle,
+   start_angle,//
+   outer_rad,
+   inner_rad,
+   end_dist,
+   sup_wid,
+   rep_dist,
+];
+*/
+
+module gen_support_tts(t_ts,c="cyan")
+{
+    let(
+        wd = 0,
+        sd = 1,
+        ca = 2,
+        sa = 3,
+        or = 4,
+        ir = 5,
+        ed = 6,
+        sw = 7,
+        rd = 8
+    ){
+        body_len = (t_ts[or]-t_ts[ir]) / sin(t_ts[ca]);
+        thickness = t_ts[wd];
+        width = t_ts[sw];
+        tail_merge = 0.5 * t_ts[ed];
+        tail_end = t_ts[ed];
+        head_width =  t_ts[wd]+2*tan(t_ts[sa])*t_ts[sd];
+        head_start = t_ts[sd];
+        
+        
+        poly_support(body_len,thickness,
+                     width,tail_merge,
+                     tail_end,head_width,
+                     head_start);
+        translate([0,0,0]);
+        
+        
+    }
+}
 
